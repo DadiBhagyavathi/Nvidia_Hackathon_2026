@@ -1,0 +1,29 @@
+# render.yaml — place in project root
+# Render reads this automatically when you connect your GitHub repo
+
+services:
+  - type: web
+    name: fraud-investigation-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: NVIDIA_API_KEY
+        sync: false          # set in Render dashboard
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: CHROMA_DIR
+        value: /opt/render/project/src/rag/chroma_db
+      - key: EMBED_MODEL
+        value: all-MiniLM-L6-v2
+      - key: NIM_MODEL
+        value: nvidia/llama-3.1-nemotron-70b-instruct
+      - key: ALLOWED_ORIGINS
+        value: https://your-app.vercel.app
+    disk:
+      name: chroma-storage
+      mountPath: /opt/render/project/src/rag/chroma_db
+      sizeGB: 1

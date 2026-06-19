@@ -1,0 +1,36 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/*.pkl
+backend/.env
+*.env
+*.sqlite
+*.db
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/.turbo/
+frontend/dist/
+frontend/out/
+frontend/.env.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# Data
+data/paysim.csv
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,46 @@
+# .github/workflows/deploy.yml
+# Deploys backend to Render + frontend auto-deploys via Vercel Git integration
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # ── 1. Backend tests ────────────────────────────────────────
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+
+      - name: Run linter
+        run: |
+          pip install ruff
+          ruff check backend/
+
+      - name: Health check (dry run)
+        run: |
+          python -c "from backend.rag.rag_pipeline import rag_query; print('RAG OK')"
+
+  # ── 2. Trigger Render deploy ────────────────────────────────
+  deploy-backend:
+    needs: test-backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+
+  # ── Frontend deploys automatically via Vercel Git Integration ──
+  # No action needed — Vercel watches the main branch automatically.
+  # Set NEXT_PUBLIC_API_URL in Vercel environment variables.
